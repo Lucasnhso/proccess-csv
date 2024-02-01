@@ -8,15 +8,25 @@ export async function readFileStream(streamFile) {
   })
   let lineIndex = 0;
   let keys
-  for await(let line of dataLine) {
-    // console.log('linha', lineIndex, line);
-    const splitedLine = line.split(',')
-    if(lineIndex === 0) {
-      keys = splitedLine.map(key => snakeToCamelCase(key));
-    } else {
-      const objItem = csvItemToObject(splitedLine, keys);
-      // console.log(objItem);
-    }
-    lineIndex++;
-  }
+
+  await new Promise((resolve, reject) => {
+    dataLine
+      .on('line', (line) => {
+        // console.log(input)
+        const splitedLine = line.split(',')
+        if(lineIndex === 0) {
+          keys = splitedLine.map(key => snakeToCamelCase(key));
+        } else {
+          const objItem = csvItemToObject(splitedLine, keys);
+          // console.log(objItem);
+        }
+        lineIndex++;
+      })
+      .on('close', () => {
+        resolve()
+      })
+      .on('error', (err) => {
+        console.log('erro', err)
+      })
+  })
 }

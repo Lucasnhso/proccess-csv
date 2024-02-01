@@ -3,7 +3,7 @@ import { readFileSync, createReadStream} from 'node:fs';
 import { readFileStream } from './readFileStream.js'
 import { csvToArray } from './utils/csvToArray.js';
 
-const csvFileName = 'train.csv';
+const csvFileName = 'test.csv';
 const csvFilePath = `./files/${csvFileName}`;
 
 function processFileWithoutStream(bufferFile) {
@@ -13,10 +13,10 @@ function processFileWithoutStream(bufferFile) {
 }
 
 async function main() {
-  const bufferFile = readFileSync(csvFilePath)
-  console.time('noStream');
-  processFileWithoutStream(bufferFile)
-  console.timeEnd('noStream');
+  // const bufferFile = readFileSync(csvFilePath)
+  // console.time('noStream');
+  // processFileWithoutStream(bufferFile)
+  // console.timeEnd('noStream');
 
   const streamFile = createReadStream(csvFilePath)
   console.time('stream');
